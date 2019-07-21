@@ -44,7 +44,7 @@ class HomeState extends State<Home> {
                     currentPercentage: percentage,
                     gutter: gutter,
                     sessions: sessions,
-                    strokeWidth: 10,
+                    strokeWidth: 1,
                   ),
                   size: Size(200, 200),
                 ),
@@ -126,8 +126,6 @@ class AvatarIndicatorPainter extends CustomPainter {
     var path = Path();
     var session = sessionSize;
 
-    path.moveTo(0, radius);
-
     var start = Vector.radians(startAngle) + gutter / 2;
     for (var i = 0; i < sessions; i++) {
       path.addArc(
@@ -149,15 +147,11 @@ class AvatarIndicatorPainter extends CustomPainter {
       Canvas canvas, Paint paint, double radius, double percentage) {
     var path = Path();
     var session = sessionSize;
-    var block = session + gutter;
 
     var sweepAngle = (2 * Math.pi - (sessions * gutter)) * percentage;
-//    var sweepSessions = (sweepAngle / (session + gutter));
-
-    path.moveTo(0, radius);
 
     var start = Vector.radians(startAngle) + gutter / 2;
-    while (sweepAngle >= block) {
+    while (sweepAngle > session) {
       path.addArc(
         Rect.fromCircle(
           center: Offset(radius + strokeWidth, radius + strokeWidth),
@@ -167,23 +161,20 @@ class AvatarIndicatorPainter extends CustomPainter {
         session,
       );
 
-      start += block;
+      start += session + gutter;
       sweepAngle -= session;
     }
 
-    canvas.drawPath(path, paint);
-    var path2 = Path();
-
-    path2.addArc(
+    path.addArc(
       Rect.fromCircle(
         center: Offset(radius + strokeWidth, radius + strokeWidth),
         radius: radius,
       ),
       start,
-      sweepAngle - gutter < 0 ? 0 : sweepAngle - gutter,
+      sweepAngle,
     );
 
-    canvas.drawPath(path2, paint..color = Colors.deepPurple);
+    canvas.drawPath(path, paint);
   }
 
   @override
@@ -193,13 +184,13 @@ class AvatarIndicatorPainter extends CustomPainter {
     var outerPaint = Paint()
       ..color = Colors.grey[300]
       ..style = PaintingStyle.stroke
-//      ..strokeCap = StrokeCap.round
+      ..strokeCap = StrokeCap.round
       ..strokeWidth = strokeWidth;
 
     var innerPaint = Paint()
       ..color = Colors.green
       ..style = PaintingStyle.stroke
-//      ..strokeCap = StrokeCap.round
+      ..strokeCap = StrokeCap.round
       ..strokeWidth = strokeWidth;
 
     drawOuterPath(canvas, outerPaint, radius);
