@@ -24,8 +24,9 @@ class Home extends StatefulWidget {
 
 class HomeState extends State<Home> {
   double gutter = 0.0;
-  int sessions = 1;
   double percentage = 0;
+  double strokeWidth = 1;
+  int sessions = 1;
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +45,7 @@ class HomeState extends State<Home> {
                     currentPercentage: percentage,
                     gutter: gutter,
                     sessions: sessions,
-                    strokeWidth: 1,
+                    strokeWidth: strokeWidth,
                   ),
                   size: Size(200, 200),
                 ),
@@ -86,6 +87,19 @@ class HomeState extends State<Home> {
                       value: percentage,
                       inactiveColor: Colors.grey[100],
                       onChanged: (v) => setState(() => percentage = v),
+                    ),
+                  ),
+                ],
+              ),
+              Row(
+                children: [
+                  Text("Stroke Width"),
+                  Expanded(
+                    child: Slider(
+                      value: strokeWidth,
+                      max: 20,
+                      inactiveColor: Colors.grey[100],
+                      onChanged: (v) => setState(() => strokeWidth = v),
                     ),
                   ),
                 ],
