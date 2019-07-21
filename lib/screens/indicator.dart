@@ -1,6 +1,7 @@
 import 'dart:math' as Math;
 
 import 'package:flutter/material.dart';
+import 'package:level_indicator/widgets/drawer.dart';
 import 'package:level_indicator/widgets/progress_indicator.dart' as Indicator;
 
 class IndicatorScreen extends StatefulWidget {
@@ -42,6 +43,9 @@ class IndicatorScreenState extends State<IndicatorScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: Drawer(
+        child: AppDrawer(),
+      ),
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
         child: Padding(

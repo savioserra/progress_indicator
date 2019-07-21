@@ -13,12 +13,12 @@ class ProgressIndicator extends AnimatedWidget {
   final Animation<double> animation;
 
   const ProgressIndicator({
+    @required this.animation,
     @required this.size,
     this.gutter = 0.0,
     this.strokeWidth = 5,
     this.sessions = 5,
     this.startAngle = -90,
-    this.animation,
   }) : super(listenable: animation);
 
   @override
