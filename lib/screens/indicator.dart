@@ -55,13 +55,16 @@ class IndicatorScreenState extends State<IndicatorScreen>
             children: [
               Container(
                 alignment: Alignment.center,
-                child: Indicator.ProgressIndicator(
-                  size: 200,
-                  gutter: gutter,
-                  sessions: sessions,
-                  strokeWidth: strokeWidth,
+                child: AnimatedBuilder(
                   animation: animationController,
-                  startAngle: startAngle,
+                  builder: (ctx, child) => Indicator.ProgressIndicator(
+                    size: 200,
+                    gutter: gutter,
+                    sessions: sessions,
+                    strokeWidth: strokeWidth,
+                    percentage: animationController.value,
+                    startAngle: startAngle,
+                  ),
                 ),
               ),
               Row(
@@ -104,13 +107,13 @@ class IndicatorScreenState extends State<IndicatorScreen>
                       inactiveColor: Colors.grey[100],
                       activeColor: Colors.lightGreen,
                       divisions: 10,
-                      onChanged: (v) => setState(() {
-                        percentage = v;
+                      onChanged: (v) {
+                        setState(() => percentage = v);
                         animationController.animateTo(
                           v,
                           curve: const ElasticOutCurve(0.9),
                         );
-                      }),
+                      },
                     ),
                   ),
                 ],

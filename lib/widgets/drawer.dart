@@ -8,12 +8,12 @@ class AppDrawer extends StatelessWidget {
         ListTile(
           contentPadding: const EdgeInsets.only(left: 20.0),
           title: Text("Indicator"),
-          onTap: () => Navigator.of(context).pushReplacementNamed("/"),
+          onTap: () => Navigator.of(context).pushNamed("/"),
         ),
         ListTile(
           contentPadding: const EdgeInsets.only(left: 20.0),
           title: Text("Header"),
-          onTap: () => Navigator.of(context).pushReplacementNamed("/header"),
+          onTap: () => Navigator.of(context).pushNamed("/header"),
         )
       ],
     );

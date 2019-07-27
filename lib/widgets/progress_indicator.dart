@@ -3,30 +3,29 @@ import 'dart:math' as Math;
 import 'package:flutter/material.dart';
 import 'package:vector_math/vector_math.dart' as Vector;
 
-class ProgressIndicator extends AnimatedWidget {
+class ProgressIndicator extends StatelessWidget {
   final double size;
   final double gutter;
   final double strokeWidth;
   final double startAngle;
   final int sessions;
-
-  final Animation<double> animation;
+  final double percentage;
 
   const ProgressIndicator({
-    @required this.animation,
     @required this.size,
+    this.percentage = 0,
     this.gutter = 0.0,
     this.strokeWidth = 5,
     this.sessions = 5,
     this.startAngle = -90,
-  }) : super(listenable: animation);
+  });
 
   @override
   Widget build(BuildContext context) {
     return CustomPaint(
       size: Size(size, size),
       painter: ProgressIndicatorPainter(
-        currentPercentage: animation.value,
+        currentPercentage: percentage,
         sessions: sessions,
         gutter: gutter,
         strokeWidth: strokeWidth,
@@ -53,14 +52,14 @@ class ProgressIndicatorPainter extends CustomPainter {
   });
 
   double getRadius(Size size) {
-    return (size.width / 2) - strokeWidth;
+    return ((size.width - strokeWidth) / 2);
   }
 
   double get sessionSize {
     return (2 * Math.pi - (sessions * gutter)) / sessions;
   }
 
-  void drawOuterPath(Canvas canvas, Paint paint, double radius) {
+  void drawOuterPath(Canvas canvas, Paint paint, double radius, Offset center) {
     var path = Path();
     var session = sessionSize;
 
@@ -68,7 +67,7 @@ class ProgressIndicatorPainter extends CustomPainter {
     for (var i = 0; i < sessions; i++) {
       path.addArc(
         Rect.fromCircle(
-          center: Offset(radius + strokeWidth, radius + strokeWidth),
+          center: center,
           radius: radius,
         ),
         start,
@@ -81,8 +80,8 @@ class ProgressIndicatorPainter extends CustomPainter {
     canvas.drawPath(path, paint);
   }
 
-  void drawInnerPath(
-      Canvas canvas, Paint paint, double radius, double percentage) {
+  void drawInnerPath(Canvas canvas, Paint paint, double radius,
+      double percentage, Offset center) {
     var path = Path();
     var session = sessionSize;
 
@@ -92,7 +91,7 @@ class ProgressIndicatorPainter extends CustomPainter {
     while (sweepAngle > session) {
       path.addArc(
         Rect.fromCircle(
-          center: Offset(radius + strokeWidth, radius + strokeWidth),
+          center: center,
           radius: radius,
         ),
         start,
@@ -105,7 +104,7 @@ class ProgressIndicatorPainter extends CustomPainter {
 
     path.addArc(
       Rect.fromCircle(
-        center: Offset(radius + strokeWidth, radius + strokeWidth),
+        center: Offset(radius + strokeWidth / 2, radius + strokeWidth / 2),
         radius: radius,
       ),
       start,
@@ -131,8 +130,10 @@ class ProgressIndicatorPainter extends CustomPainter {
       ..strokeCap = StrokeCap.round
       ..strokeWidth = strokeWidth;
 
-    drawOuterPath(canvas, outerPaint, radius);
-    drawInnerPath(canvas, innerPaint, radius, currentPercentage);
+    var center = Offset(radius + strokeWidth / 2, radius + strokeWidth / 2);
+
+    drawOuterPath(canvas, outerPaint, radius, center);
+    drawInnerPath(canvas, innerPaint, radius, currentPercentage, center);
   }
 
   @override
