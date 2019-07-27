@@ -1,5 +1,6 @@
 import 'dart:math' as Math;
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:level_indicator/widgets/drawer.dart';
 import 'package:level_indicator/widgets/progress_indicator.dart' as Indicator;
@@ -55,15 +56,17 @@ class IndicatorScreenState extends State<IndicatorScreen>
             children: [
               Container(
                 alignment: Alignment.center,
-                child: AnimatedBuilder(
-                  animation: animationController,
-                  builder: (ctx, child) => Indicator.ProgressIndicator(
-                    size: 200,
-                    gutter: gutter,
-                    sessions: sessions,
-                    strokeWidth: strokeWidth,
-                    percentage: animationController.value,
-                    startAngle: startAngle,
+                child: RepaintBoundary(
+                  child: AnimatedBuilder(
+                    animation: animationController,
+                    builder: (ctx, child) => Indicator.ProgressIndicator(
+                      size: 200,
+                      gutter: gutter,
+                      sessions: sessions,
+                      strokeWidth: strokeWidth,
+                      percentage: animationController.value,
+                      startAngle: startAngle,
+                    ),
                   ),
                 ),
               ),
@@ -71,9 +74,8 @@ class IndicatorScreenState extends State<IndicatorScreen>
                 children: [
                   Text("Gutter"),
                   Expanded(
-                    child: Slider(
-                      inactiveColor: Colors.grey[100],
-                      activeColor: Colors.lightGreen,
+                    child: CupertinoSlider(
+                      activeColor: Colors.black54,
                       value: gutter,
                       min: 0,
                       max: (2 * Math.pi) / sessions,
@@ -86,10 +88,9 @@ class IndicatorScreenState extends State<IndicatorScreen>
                 children: [
                   Text("Sessions"),
                   Expanded(
-                    child: Slider(
+                    child: CupertinoSlider(
                       value: sessions.toDouble(),
-                      inactiveColor: Colors.grey[100],
-                      activeColor: Colors.lightGreen,
+                      activeColor: Colors.black54,
                       min: 1,
                       max: 8,
                       divisions: 7,
@@ -102,10 +103,9 @@ class IndicatorScreenState extends State<IndicatorScreen>
                 children: [
                   Text("Percentage"),
                   Expanded(
-                    child: Slider(
+                    child: CupertinoSlider(
                       value: percentage,
-                      inactiveColor: Colors.grey[100],
-                      activeColor: Colors.lightGreen,
+                      activeColor: Colors.black54,
                       divisions: 10,
                       onChanged: (v) {
                         setState(() => percentage = v);
@@ -122,11 +122,10 @@ class IndicatorScreenState extends State<IndicatorScreen>
                 children: [
                   Text("Stroke Width"),
                   Expanded(
-                    child: Slider(
+                    child: CupertinoSlider(
                       value: strokeWidth,
                       max: 20,
-                      inactiveColor: Colors.grey[100],
-                      activeColor: Colors.lightGreen,
+                      activeColor: Colors.black54,
                       onChanged: (v) => setState(() => strokeWidth = v),
                     ),
                   ),
@@ -136,12 +135,11 @@ class IndicatorScreenState extends State<IndicatorScreen>
                 children: [
                   Text("Angle"),
                   Expanded(
-                    child: Slider(
+                    child: CupertinoSlider(
                       value: startAngle,
                       max: 180,
                       min: -180,
-                      inactiveColor: Colors.grey[100],
-                      activeColor: Colors.lightGreen,
+                      activeColor: Colors.black54,
                       onChanged: (v) => setState(() => startAngle = v),
                     ),
                   ),
